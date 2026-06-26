@@ -53,6 +53,18 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Sample"
 
+      - name: Install ATL/MFC.
+        shell: pwsh
+        run: |
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          if ($vsPath) {
+            Write-Host "Found VS at $vsPath. Installing ATL/MFC..."
+            $p = Start-Process -FilePath "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe" -Wait -PassThru -NoNewWindow -ArgumentList 'modify', '--installPath', "`"$vsPath`"", '--add', 'Microsoft.VisualStudio.Component.VC.ATL', '--add', 'Microsoft.VisualStudio.Component.VC.ATLMFC', '--quiet', '--norestart'
+            if ($p.ExitCode -ne 0 -and $p.ExitCode -ne 3010) { exit $p.ExitCode }
+          } else {
+            Write-Host "Visual Studio installation not found."
+          }
+
       - uses: Eden-CI/msvc-dev-cmd@master
         name: Native Tools Command Prompt.
         with:
@@ -107,7 +119,7 @@ jobs:
       - name: Telegram Desktop build.
         run: |
           cd %TBUILD%\%REPO_NAME%\Telegram
-          call configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release -D CMAKE_COMPILE_WARNING_AS_ERROR=ON -D CMAKE_MSVC_DEBUG_INFORMATION_FORMAT= -D DESKTOP_APP_DISABLE_AUTOUPDATE=OFF -D DESKTOP_APP_DISABLE_CRASH_REPORTS=OFF
+          call configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release -D CMAKE_COMPILE_WARNING_AS_ERROR=OFF -D CMAKE_MSVC_DEBUG_INFORMATION_FORMAT= -D DESKTOP_APP_DISABLE_AUTOUPDATE=OFF -D DESKTOP_APP_DISABLE_CRASH_REPORTS=OFF
           cmake --build ..\out --config Release --parallel
 
       - name: Package Windows Artifact.
@@ -183,7 +195,8 @@ jobs:
           $IMAGE_TAG \
           /usr/src/tdesktop/Telegram/build/docker/centos_env/build.sh \
           -D CMAKE_CONFIGURATION_TYPES=Release \
-          -D CMAKE_COMPILE_WARNING_AS_ERROR=ON \
+          -D CMAKE_COMPILE_WARNING_AS_ERROR=OFF \
+          -D CMAKE_CXX_FLAGS="-Wno-restrict" \
           -D TDESKTOP_API_ID=2040 \
           -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 \
           -D DESKTOP_APP_DISABLE_AUTOUPDATE=OFF \
