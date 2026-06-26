@@ -653,6 +653,11 @@ void SetupRows(
 		QGuiApplication::clipboard()->setText(self->phone());
 		controller->showToast(tr::lng_text_copied(tr::now), 500);
 	};
+	const auto showChangePhone = [=] {
+		controller->show(
+			Ui::MakeInformBox(tr::lng_change_phone_error()));
+		controller->window().activate();
+	};
 	const auto phoneButton = AddRow(
 		container,
 		tr::lng_settings_phone_label(),

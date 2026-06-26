@@ -28,7 +28,7 @@ public:
 	DeleteMessagesBox(
 		QWidget*,
 		not_null<HistoryItem*> item,
-		bool suggestModerateActions);
+		bool suggestModerateActions = true);
 	DeleteMessagesBox(
 		QWidget*,
 		not_null<Main::Session*> session,

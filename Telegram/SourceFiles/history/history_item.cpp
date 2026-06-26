@@ -562,7 +562,8 @@ HistoryItem::HistoryItem(
 					data.ventities().value_or_empty())
 			};
 			if (!skipSetText) {
-			setText(_media ? textWithEntities : EnsureNonEmpty(textWithEntities));
+				setText(_media ? textWithEntities : EnsureNonEmpty(textWithEntities));
+			}
 		}
 		if (const auto groupedId = data.vgrouped_id()) {
 			setGroupId(

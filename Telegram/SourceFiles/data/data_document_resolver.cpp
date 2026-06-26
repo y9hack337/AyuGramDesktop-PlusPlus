@@ -298,8 +298,6 @@ void ResolveDocument(
 				if (!Core::App().iv().showMarkdown(path, context)) {
 					LaunchWithWarning(path, item);
 				}
-			}
-		}
 			} else if (document->status == FileReady
 				|| document->status == FileDownloadFailed) {
 				DocumentSaveClickHandler::Save(

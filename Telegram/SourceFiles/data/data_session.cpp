@@ -2964,8 +2964,6 @@ void Session::checkTTLs() {
 			}
 		}
 	}
-		}
-	}
 	scheduleNextTTLs();
 }
 
@@ -3015,6 +3013,7 @@ void Session::checkFormattedDateUpdates() {
 void Session::processMessagesDeleted(
 		PeerId peerId,
 		const QVector<MTPint> &data) {
+	const auto &settings = AyuSettings::getInstance();
 	const auto list = messagesList(peerId);
 	const auto affected = historyLoaded(peerId);
 	if (!list && !affected) {
@@ -3054,6 +3053,7 @@ void Session::processMessagesDeleted(
 }
 
 void Session::processNonChannelMessagesDeleted(const QVector<MTPint> &data) {
+	const auto &settings = AyuSettings::getInstance();
 	auto toDestroy = std::vector<not_null<HistoryItem*>>();
 	auto historiesToCheck = base::flat_set<not_null<History*>>();
 	for (const auto &messageId : data) {
@@ -3074,8 +3074,6 @@ void Session::processNonChannelMessagesDeleted(const QVector<MTPint> &data) {
 		notifyItemsAboutToBeDestroyed(toDestroy);
 		for (const auto &item : toDestroy) {
 			item->destroy();
-		}
-	}
 		}
 	}
 	for (const auto &history : historiesToCheck) {
