@@ -1,8 +1,12 @@
-# AyuGram
+# AyuGram Desktop PlusPlus (v6.9.3)
 
 ![AyuGram Logo](.github/AyuGram.png) ![AyuChan](.github/AyuChan.png)
 
 [ English  |   [Русский](README-RU.md) ]
+
+> [!NOTE]
+> **AyuGramDesktop-PlusPlus** is an updated fork of the popular AyuGram Telegram client, modernized to build on top of upstream **Telegram Desktop v6.9.3** while preserving all custom AyuGram modifications (Ghost Mode, Anti-Recall, custom fonts, etc.).
+
 
 ## Features
 
